@@ -5,7 +5,10 @@ inputs:
     description: 'Adding input values for caching dependencies'
     required: false
     default: 'true'
-
+outputs:
+  demo-outcaching:
+    description: 'Adding output values for installing depedencies'
+    value: ${{ steps.run-dep }}
 runs:
   using: 'composite'
   steps:
@@ -18,5 +21,8 @@ runs:
         key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
     - name: Install dependencies
       if: steps.cache.outputs.cache-hit != 'true' || inputs.demo-caching != 'true'
-      run: npm ci
+      id: run-dep
+      run: | 
+        npm ci
+        echo "cache='${{ inputs.demo-caching }}'" >> $GITHUB_OUTPUT
       shell: bash

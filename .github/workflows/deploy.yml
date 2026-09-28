@@ -10,9 +10,12 @@ jobs:
       - name: Get code
         uses: actions/checkout@v7
       - name: using custom cache actions
+        id: custom
         uses: ./.github/actions/composite
         with:
           demo-caching: 'false'
+      - name: Output information
+        run: echo "cache used? ${{ steps.custom.outputs.demo-caching }}"
       - name: Lint code
         run: npm run lint
   test:
